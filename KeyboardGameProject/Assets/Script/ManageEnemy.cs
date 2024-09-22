@@ -75,11 +75,11 @@ public class ManageEnemy : MonoBehaviour
         {
             try
             {
-                GameObject.Find(key.name).GetComponent<Transform>().Find("Enemy1(Clone)").GetComponent<Enemy>().MoveToPlayer();
+                GameObject.Find(key.name).GetComponent<Transform>().Find("Enemy1(Clone)").Find("Enemy").GetComponent<Enemy>().MoveToPlayer();
             }
             catch
             {
-                Debug.Log("적 존재 X");
+                //Debug.Log("적 존재 X");
             }
         }
     }

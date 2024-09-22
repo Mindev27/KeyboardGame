@@ -70,14 +70,14 @@ public class InteractAttack : MonoBehaviour
 
         string[] list = { };
 
-        foreach(var pattern in attackdata.attackPatterns)
+        foreach(var pattern in attackdata.attackPatterns)//공격 패턴 확인
         {
-            if (pattern.Key.Equals(currentKey))
+            if (pattern.Key.Equals(currentKey))//현재 칸과 일치하는 패턴을 가져옴
             {
-                switch (attackStack.Pop())
+                switch (attackStack.Pop())//공격 종류에 따른 분류
                 {
                     case 1:
-                        switch (attackStack.Count)
+                        switch (attackStack.Count)//공격 스택의 따른 분류
                         {
                             case 0:
                                 list = pattern.Value.horizonOne;
@@ -146,13 +146,13 @@ public class InteractAttack : MonoBehaviour
             }
         }
 
-        AttackEffect(list);
+        AttackEffect(list, attackStack.Count);
 
         StartCoroutine(InitializeattackColor(list));//공격 표시 / 이후 애니메이션으로 구현
         attackStack.Clear();
     }
 
-    private void AttackEffect(string[] attackList)
+    private void AttackEffect(string[] attackList, int damage)
     {
         foreach (string key in attackList)
         {
@@ -160,7 +160,7 @@ public class InteractAttack : MonoBehaviour
             GameObject.Find("back_" + key).GetComponent<SpriteRenderer>().color = Color.green;
             try
             {
-                GameObject.Find(key).GetComponent<Transform>().Find("Enemy1(Clone)").GetComponent<Enemy>().GetDamage(1);
+                GameObject.Find(key).GetComponent<Transform>().Find("Enemy1(Clone)").Find("Enemy").GetComponent<Enemy>().GetDamage(damage + 1);
             }
             catch
             {
@@ -216,7 +216,7 @@ public class InteractAttack : MonoBehaviour
                     key.attack = 0;
                 }
                 else
-                    Debug.Log("공격 할당 안됨");
+                    //Debug.Log("공격 할당 안됨");
                 break;
             }
         }

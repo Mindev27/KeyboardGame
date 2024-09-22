@@ -50,11 +50,11 @@ public class Player : MonoBehaviour
             interactAttack.InputStack(currentKey);//해당 칸 공격 스택에 삽입
             try
             {
-                keyObj.transform.Find(currentKey).Find("Enemy1(Clone)").GetComponent<Enemy>().Attack();
+                keyObj.transform.Find(currentKey).Find("Enemy1(Clone)").Find("Enemy").GetComponent<Enemy>().Attack();
             }
             catch
             {
-                Debug.Log("적 X(데미지)");
+                //Debug.Log("적 X(데미지)");
             }
         }
         turnMove = false;
@@ -165,16 +165,16 @@ public class Player : MonoBehaviour
     // 키로 이동시도 (거리가 1인경우 이동가능)
     private void AttemptMove(string key)
     {
-        Debug.Log(currentKey + "에서 " + key + "로 이동 시도");
+        //Debug.Log(currentKey + "에서 " + key + "로 이동 시도");
         
         if (adjList[currentKey].Contains(key))
         {
             MoveToKey(key);
-            Debug.Log(currentKey + "에서 " + key + "로 이동");
+            //Debug.Log(currentKey + "에서 " + key + "로 이동");
         }
         else
         {
-            Debug.Log(currentKey + "와 " + key + "로의 연결 없음");
+            //Debug.Log(currentKey + "와 " + key + "로의 연결 없음");
         }
     }
 

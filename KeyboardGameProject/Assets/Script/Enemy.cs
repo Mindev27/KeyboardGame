@@ -22,8 +22,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         ManageKeyBoard manageKeyBoard = FindObjectOfType<ManageKeyBoard>();
-        enemyHpBar = transform.Find("Canvas").Find("Slider").gameObject;
-        moveCycleText = this.transform.Find("Canvas").transform.Find("MoveCycleText").gameObject;
+        enemyHpBar = transform.parent.Find("Canvas").Find("Slider").gameObject;
+        moveCycleText = transform.parent.Find("Canvas").transform.Find("MoveCycleText").gameObject;
         player = GameObject.Find("Player");
 
         nowCycle = moveCycle;
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
 
         adjList = manageKeyBoard.adjList;
         keyBoard = manageKeyBoard.keyBoard;
-        
+        Rotate();
     }
 
     // Update is called once per frame
@@ -45,19 +45,19 @@ public class Enemy : MonoBehaviour
     {
         if (nowCycle > 0)
         {
+            Rotate();
             nowCycle -= 1;
             moveCycleText.GetComponent<TextMeshProUGUI>().text = (nowCycle).ToString();
             return;
         }
 
-        
 
         bool moved = false;
 
         // 현재 타일에서 적 플래그 제거
         foreach (ManageKeyBoard.key key in keyBoard)
         {
-            if (key.name.Equals(this.transform.parent.name))
+            if (key.name.Equals(this.transform.parent.parent.name))//부모의 부모 필요
             {
                 key.isEnemy = false;
                 break;
@@ -68,13 +68,14 @@ public class Enemy : MonoBehaviour
         float minDistance = float.MaxValue;
         string bestKey = null;
 
-        foreach (string keyName in adjList[this.transform.parent.name])
+        foreach (string keyName in adjList[this.transform.parent.parent.name])//부모의 부모 필요
         {
             foreach (ManageKeyBoard.key key in keyBoard)
             {
                 if (key.name.Equals(keyName) && !key.isEnemy)
                 {
                     float distanceToPlayer = Vector2.Distance(GameObject.Find(keyName).transform.position, player.transform.position);
+                    
                     if (distanceToPlayer < minDistance)
                     {
                         minDistance = distanceToPlayer;
@@ -84,6 +85,7 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+
 
         // 최적의 타일로 이동
         if (moved && bestKey != null)
@@ -97,6 +99,7 @@ public class Enemy : MonoBehaviour
                     break;
                 }
             }
+            Rotate();
         }
 
         if (player.GetComponent<Player>().currentKey.Equals(bestKey))
@@ -108,13 +111,21 @@ public class Enemy : MonoBehaviour
         moveCycleText.GetComponent<TextMeshProUGUI>().text = (nowCycle).ToString();
     }
 
+    private void Rotate()//각도 변경(플레이어 방향)
+    {
+        //각도 계산
+        float angle = Mathf.Atan2(player.transform.position.y - transform.position.y, player.transform.position.x - transform.position.x)
+                            * Mathf.Rad2Deg - 180;//라디안 각도로 변환 후 180도 빼기(왼쪽이 정면)
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward * 10);
+    }
+
     public void MoveToKey(string key)
     {
         GameObject keyObj = GameObject.Find(key);
         if (keyObj != null)
         {
-            this.transform.parent = keyObj.transform;
-            this.transform.position = keyObj.transform.position;
+            transform.parent.parent = keyObj.transform;
+            transform.parent.transform.position = keyObj.transform.position;
         }
     }
 
@@ -138,7 +149,7 @@ public class Enemy : MonoBehaviour
             }
 
             FindAnyObjectByType<Experience>().AddEXP(deathEXP);
-            Destroy(this.gameObject);
+            Destroy(transform.parent.gameObject);
         }
         else
         {
