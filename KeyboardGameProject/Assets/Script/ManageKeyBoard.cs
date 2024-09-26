@@ -101,13 +101,14 @@ public class ManageKeyBoard : MonoBehaviour
 
     public class key//각 칸
     {
-        public int enemyDelay = 2;//적 생성 딜레이
         public string name;
         public int attack;// 공격 할당
-        public int delay;
         public bool isEnemy;// 적 존재 유무
         public bool isSuburb;// 최외곽 유무
         public bool isAttack;
+
+        private int enemyDelay = 2;//적 생성 딜레이
+        private int delay;
 
         public key(string name)
         {

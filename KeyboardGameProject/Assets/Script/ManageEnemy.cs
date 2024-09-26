@@ -26,6 +26,15 @@ public class ManageEnemy : MonoBehaviour
             
     }
 
+    public void ChangeDelay(int delay)
+    {
+        foreach(var key in keyBoard)
+        {
+            key.ChangeCreateDelay(delay);
+        }
+        setEnemyDelay = delay;
+    }
+
     public void SummonEnemy()// Àû »ý¼º
     {
         if (nowDelay > 0)

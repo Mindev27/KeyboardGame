@@ -66,6 +66,7 @@ public class Experience : MonoBehaviour
         this.GetComponent<Player>().turnMove = true;
         levelUp.SetActive(false);
         timer.GetComponent<Timer>().Resume();
+        FindAnyObjectByType<ManageEnemy>().ChangeDelay(9 - EXPLevel > 0 ? 9 - EXPLevel : 1);
     }
 
     private void CalcEXPLevel()//경험치에 따른 경험치 레벨 처리
